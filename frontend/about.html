@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens — About</title>
+    <meta name="description" content="Learn how TruthLens uses a 6-stage verification master process to classify real, fake, unverified, and satire news.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=63">
+    <style>
+        /* Perfect vertical and horizontal centering layout */
+        .page-container {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            min-height: 100vh !important;
+            padding: 4.5rem 1.5rem 1.5rem !important;
+            box-sizing: border-box !important;
+        }
+        .arch-section {
+            width: 100% !important;
+            max-width: 800px !important;
+            margin: 0 !important;
+        }
+        .about-card {
+            background: rgba(15, 10, 40, 0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            backdrop-filter: blur(16px);
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        }
+        .about-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .about-desc {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto 1.75rem;
+        }
+
+        /* Horizontal Pipeline Step Tracker */
+        .pipeline-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+        .pipeline-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(123, 97, 255, 0.1);
+            border: 1.5px solid rgba(123, 97, 255, 0.4);
+            color: #c77dff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.4rem;
+            transition: all 0.3s;
+        }
+        .pipeline-step:hover .step-num {
+            border-color: #00f0ff;
+            color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+        .step-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pipeline-line {
+            position: absolute;
+            top: 14px;
+            left: 5%;
+            right: 5%;
+            height: 1.5px;
+            background: linear-gradient(90deg, rgba(123,97,255,0.2) 0%, rgba(0,240,255,0.2) 100%);
+            z-index: 1;
+        }
+
+        /* Two-Column Details Layout */
+        .about-two-col {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 1.5rem;
+        }
+        .col-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .col-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .col-card-title svg {
+            color: #7B61FF;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Signals Styling */
+        .signal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .signal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            border-left: 3px solid rgba(123, 97, 255, 0.5);
+        }
+        .signal-item span:first-child {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        .signal-item span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f0ff;
+            font-weight: 600;
+        }
+
+        /* Verdict styling */
+        .verdict-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .verdict-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.45rem 0.75rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .verdict-item span:first-child {
+            color: #94a3b8;
+        }
+        .verdict-item span:last-child {
+            font-weight: 700;
+        }
+        .v-verified { color: #2ed573; }
+        .v-likely-verified { color: #69f0ae; }
+        .v-unverified { color: #ffa502; }
+        .v-likely-false { color: #ff6b6b; }
+        .v-false { color: #ff4757; }
+        .v-satire { color: #c77dff; }
+
+        @media (max-width: 768px) {
+            .about-two-col {
+                grid-template-columns: 1fr;
+            }
+            .pipeline-steps {
+                flex-wrap: wrap;
+                gap: 1.25rem 0.25rem;
+            }
+            .pipeline-step {
+                flex: none;
+                width: 30%;
+            }
+            .pipeline-line {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <svg class="logo-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00f0ff" />
+                        <stop offset="100%" stop-color="#7B61FF" />
+                    </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m14.31 8 5.74 9.94"/>
+                <path d="M9.69 8h11.48"/>
+                <path d="m7.38 12 5.74-9.94"/>
+                <path d="M9.69 16 3.95 6.06"/>
+                <path d="M14.31 16H2.83"/>
+                <path d="m16.62 12-5.74 9.94"/>
+            </svg>
+            <span>Truth<strong>Lens</strong></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="analyze.html">Analyze</a>
+            <a href="about.html" class="active">About</a>
+            <a href="analyze.html" class="nav-cta-btn">Start Analysis &rarr;</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="arch-section">
+            <div class="about-card">
+                <div class="about-title">Forensic <span class="highlight" style="background: linear-gradient(135deg, #00f0ff 0%, #7B61FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Engine</span></div>
+                <div class="about-desc">
+                    TruthLens evaluates news items through a 6-stage factual verification pipeline, collecting evidence via real-time search grounding and outputting multi-dimensional confidence ratings.
+                </div>
+
+                <!-- Horizontal Pipeline Steps -->
+                <div class="pipeline-steps">
+                    <div class="pipeline-line"></div>
+                    <div class="pipeline-step">
+                        <div class="step-num">01</div>
+                        <div class="step-label">Input</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-num">02</div>
+                        <div class="step-label">Claims</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-num">03</div>
+                        <div class="step-label">Search</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-num">04</div>
+                        <div class="step-label">Verify</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-num">05</div>
+                        <div class="step-label">Scores</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-num">06</div>
+                        <div class="step-label">Verdict</div>
+                    </div>
+                </div>
+
+                <!-- Grid Details -->
+                <div class="about-two-col">
+                    
+                    <!-- Signals -->
+                    <div class="col-card">
+                        <div class="col-card-title">
+                            <i data-lucide="activity"></i>
+                            <span>Verification Signals</span>
+                        </div>
+                        <div class="signal-list">
+                            <div class="signal-item">
+                                <span>Source Credibility</span>
+                                <span>25%</span>
+                            </div>
+                            <div class="signal-item">
+                                <span>Evidence Strength</span>
+                                <span>25%</span>
+                            </div>
+                            <div class="signal-item">
+                                <span>Cross-Source Agreement</span>
+                                <span>20%</span>
+                            </div>
+                            <div class="signal-item">
+                                <span>Author Expertise</span>
+                                <span>15%</span>
+                            </div>
+                            <div class="signal-item">
+                                <span>Contradiction Score</span>
+                                <span>10%</span>
+                            </div>
+                            <div class="signal-item">
+                                <span>Satire Markers</span>
+                                <span>5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verdict Tiers -->
+                    <div class="col-card">
+                        <div class="col-card-title">
+                            <i data-lucide="shield-alert"></i>
+                            <span>Verdict Categories</span>
+                        </div>
+                        <div class="verdict-list">
+                            <div class="verdict-item">
+                                <span>Score 80–100</span>
+                                <span class="v-verified">Verified</span>
+                            </div>
+                            <div class="verdict-item">
+                                <span>Score 60–79</span>
+                                <span class="v-likely-verified">Likely Verified</span>
+                            </div>
+                            <div class="verdict-item">
+                                <span>Score 20–59</span>
+                                <span class="v-unverified">Unverified</span>
+                            </div>
+                            <div class="verdict-item">
+                                <span>Score 5–19</span>
+                                <span class="v-likely-false">Likely False</span>
+                            </div>
+                            <div class="verdict-item">
+                                <span>Score 0–4</span>
+                                <span class="v-false">False</span>
+                            </div>
+                            <div class="verdict-item">
+                                <span>Satire tags ≥ 70</span>
+                                <span class="v-satire">Satire / Fiction</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <a href="analyze.html" class="btn primary-btn" style="text-decoration:none; padding: 0.75rem 2rem; font-size: 0.9rem; display: inline-block;">Start Analysis &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

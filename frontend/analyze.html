@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens — Analyze Article</title>
+    <meta name="description" content="Paste your news article or upload a file to get a full AI-powered fake news analysis.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=36">
+</head>
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <svg class="logo-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00f0ff" />
+                        <stop offset="100%" stop-color="#7B61FF" />
+                    </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m14.31 8 5.74 9.94"/>
+                <path d="M9.69 8h11.48"/>
+                <path d="m7.38 12 5.74-9.94"/>
+                <path d="M9.69 16 3.95 6.06"/>
+                <path d="M14.31 16H2.83"/>
+                <path d="m16.62 12-5.74 9.94"/>
+            </svg>
+            <span>Truth<strong>Lens</strong></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="analyze.html" class="active">Analyze</a>
+            <a href="about.html">About</a>
+            <a href="analyze.html" class="nav-cta-btn">Start Analysis →</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Axiogen <span class="highlight">Analysis Engine</span></h1>
+        </div>
+
+        <div class="analyze-card card">
+            <form id="analyze-form">
+                <div class="textarea-wrapper">
+                    <textarea id="article-text" placeholder="Paste the news article, headline, or suspicious text here..."></textarea>
+                </div>
+
+                <div class="divider-row"><span>— or upload a file —</span></div>
+
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-content">
+                        <div class="file-illustration">
+                            <div class="illust-file illust-back-left"><i data-lucide="file-text" style="color:var(--accent-primary);"></i></div>
+                            <div class="illust-file illust-main"><i data-lucide="sparkles" style="color:var(--accent-purple);"></i></div>
+                            <div class="illust-file illust-back-right"><i data-lucide="image" style="color:var(--accent-blue);"></i></div>
+                        </div>
+                        <p class="upload-title">Drag & drop <span>documents</span>, <span>screenshots</span>, or <span>any file</span></p>
+                        <p class="upload-sub-text">or <span class="browse-link">browse files</span> on your computer</p>
+                    </div>
+                    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" class="file-input">
+                </div>
+                
+                <div id="file-preview" class="file-preview hidden">
+                    <span id="preview-name" class="preview-name">filename.pdf</span>
+                    <button type="button" id="remove-file-btn" class="remove-btn">✖</button>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn primary-btn full-btn">
+                    <span class="btn-text">Start Analysis</span>
+                    <div class="spinner hidden" id="spinner"></div>
+                </button>
+                
+                <div class="card-footer-tips">
+                    <div class="tip-item"><i data-lucide="shield" style="width:16px; height:16px; color:var(--accent-primary); margin-right:6px;"></i> Private & Secure</div>
+                    <div class="tip-item"><i data-lucide="globe" style="width:16px; height:16px; color:var(--accent-purple); margin-right:6px;"></i> 100+ Languages Supported</div>
+                    <div class="tip-item"><i data-lucide="file-text" style="width:16px; height:16px; color:var(--accent-blue); margin-right:6px;"></i> Texts, PDFs & Images</div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+    <script src="app.js?v=22"></script>
+</body>
+</html>

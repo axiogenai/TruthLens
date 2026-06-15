@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens — AI-Powered Fake News Detector</title>
+    <meta name="description" content="TruthLens uses Gemini AI to detect fake news, AI-generated content, and misinformation with a full forensic breakdown.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=36">
+</head>
+<body>
+    <div class="landing-grid-overlay"></div>
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <svg class="logo-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00f0ff" />
+                        <stop offset="100%" stop-color="#7B61FF" />
+                    </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m14.31 8 5.74 9.94"/>
+                <path d="M9.69 8h11.48"/>
+                <path d="m7.38 12 5.74-9.94"/>
+                <path d="M9.69 16 3.95 6.06"/>
+                <path d="M14.31 16H2.83"/>
+                <path d="m16.62 12-5.74 9.94"/>
+            </svg>
+            <span>Truth<strong>Lens</strong></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="analyze.html">Analyze</a>
+            <a href="about.html">About</a>
+            <a href="analyze.html" class="nav-cta-btn">Start Analysis →</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-glow"></div>
+        <div class="hero-content">
+            <div class="hero-badge"><i data-lucide="sparkles"></i> Powered by Axiogen.in</div>
+            <h1 class="hero-title">
+                Detect Fake News<br>
+                <span class="hero-gradient-text">Before It Spreads</span>
+            </h1>
+            <p class="hero-subtitle">
+                TruthLens uses advanced multi-model AI to analyze news articles, screenshots, and documents — 
+                exposing misinformation with a full forensic breakdown in seconds.
+            </p>
+            <div class="hero-actions">
+                <a href="analyze.html" class="btn primary-btn">Run Free Analysis →</a>
+                <a href="about.html" class="btn ghost-btn">How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item"><strong>Axiogen.in</strong><span>AI Engine</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat-item"><strong>6 Layer</strong><span>Analysis</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat-item"><strong>Real-Time</strong><span>Detection</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2>Everything You Need to <span class="highlight">Fight Misinformation</span></h2>
+            <p>Six powerful detection layers working together in real-time.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="dna"></i></div>
+                <h3>Misinformation DNA</h3>
+                <p>Classify articles into Propaganda, Satire, Conspiracy, Clickbait and more — not just "Fake".</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="trending-up"></i></div>
+                <h3>Spread Risk Predictor</h3>
+                <p>Estimate how likely fake content is to go viral with share range predictions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="bot"></i></div>
+                <h3>AI Content Detector</h3>
+                <p>Detect if the text was written by an AI like ChatGPT with detailed fingerprint scoring.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="activity"></i></div>
+                <h3>Suspicion Timeline</h3>
+                <p>See trust drop sentence-by-sentence with a live chart — most tools only give one final score.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="target"></i></div>
+                <h3>Manipulation Heatmap</h3>
+                <p>Identify the exact words and phrases used to emotionally manipulate the reader.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="files"></i></div>
+                <h3>Multi-Format Input</h3>
+                <p>Paste text, upload PDF documents, Word files, or just drag-and-drop a screenshot.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-glow"></div>
+        <h2>Ready to Detect the Truth?</h2>
+        <p>No sign-up required. Paste any news article and get a full AI forensic report in seconds.</p>
+        <a href="analyze.html" class="btn primary-btn large-btn">Start Free Analysis →</a>
+    </section>
+
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+        });
+    </script>
+</body>
+</html>
