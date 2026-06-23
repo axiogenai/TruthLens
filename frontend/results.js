@@ -78,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
         banner.classList.remove('verifying');
         banner.classList.add('verified');
         if (corrections.length > 0) {
-            pipelineStatusEl.innerHTML = `Resolved ${corrections.length} data discrepancies. Signals & scores updated.`;
+            pipelineStatusEl.textContent = `Resolved ${corrections.length} data discrepancies. Signals & scores updated.`; // Safe: prevents XSS
+// OR if HTML is needed:
+// pipelineStatusEl.innerHTML = sanitizeHTML(`Resolved ${corrections.length} data discrepancies. Signals & scores updated.`);;
         } else {
             pipelineStatusEl.innerHTML = `All data points consistent. Verification complete.`;
         }
