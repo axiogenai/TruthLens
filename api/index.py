@@ -819,7 +819,8 @@ Output ONLY this exact JSON structure. No markdown backticks, no other text.
             response = await call_gemini_with_rotation(
                 contents=contents_for_gemini,
                 config=types.GenerateContentConfig(
-                    tools=[types.Tool(google_search=types.GoogleSearch())]
+                    tools=[types.Tool(google_search=types.GoogleSearch())],
+                    temperature=0.0
                 ),
                 model_name=model_name
             )
