@@ -6,17 +6,10 @@ import json
 import io
 from google import genai
 from google.genai import types
-import pypdf
-from PIL import Image
 import asyncio
 import httpx
 import os
 import re
-
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
 
 app = FastAPI(title="TruthLens — News Verification API")
 
@@ -346,12 +339,7 @@ def map_score_to_verdict(score: int, satire_markers: int = 0) -> str:
 # PDF TEXT EXTRACTION
 # ============================================================
 
-def extract_pdf_text(file_bytes):
-    reader = pypdf.PdfReader(io.BytesIO(file_bytes))
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
+# PDF Text extraction removed in favor of native Gemini PDF handling.
 
 
 # ============================================================
@@ -714,10 +702,11 @@ async def predict_fake_news(
             filename = file.filename.lower()
 
             if filename.endswith(".pdf"):
-                extracted_text += extract_pdf_text(file_bytes)
+                contents.append(types.Part.from_bytes(data=file_bytes, mime_type="application/pdf"))
+                extracted_text += "[PDF Document Attached]\n"
             elif filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-                image = Image.open(io.BytesIO(file_bytes))
-                contents.append(image)
+                mime_type = "image/png" if filename.endswith(".png") else "image/jpeg"
+                contents.append(types.Part.from_bytes(data=file_bytes, mime_type=mime_type))
                 extracted_text += "[Screenshot Image Attached]\n"
 
         if not extracted_text.strip() and not contents:
@@ -968,154 +957,8 @@ Output ONLY this exact JSON structure. No markdown backticks, no other text.
 
 @app.post("/api/export/pdf")
 async def export_pdf(data: dict = Body(...)):
-    try:
-        pdf_buffer = io.BytesIO()
-        doc = SimpleDocTemplate(
-            pdf_buffer, pagesize=letter,
-            leftMargin=54, rightMargin=54, topMargin=54, bottomMargin=54
-        )
-        styles = getSampleStyleSheet()
-
-        title_style = ParagraphStyle(
-            'DocTitle', parent=styles['Heading1'],
-            fontName='Helvetica-Bold', fontSize=24, leading=28,
-            textColor=colors.HexColor("#0b0c10"), spaceAfter=15
-        )
-        h2_style = ParagraphStyle(
-            'DocHeader', parent=styles['Heading2'],
-            fontName='Helvetica-Bold', fontSize=14, leading=18,
-            textColor=colors.HexColor("#45a29e"), spaceBefore=12, spaceAfter=6
-        )
-        body_style = ParagraphStyle(
-            'DocBody', parent=styles['BodyText'],
-            fontName='Helvetica', fontSize=10, leading=14,
-            textColor=colors.HexColor("#2d3748")
-        )
-
-        story = []
-        story.append(Paragraph("TruthLens Verification Report", title_style))
-        story.append(Spacer(1, 10))
-
-        # Verdict Summary
-        verdict = data.get("verdict", "Unverified")
-        verdict_score = data.get("verdict_score", 50)
-
-        verdict_display = verdict.upper()
-        if verdict == "Verified":
-            verdict_display = "✅ VERIFIED"
-        elif verdict == "Likely Verified":
-            verdict_display = "🟢 LIKELY VERIFIED"
-        elif verdict == "Unverified":
-            verdict_display = "⚠ UNVERIFIED"
-        elif verdict == "Likely False":
-            verdict_display = "🟠 LIKELY FALSE"
-        elif verdict == "False":
-            verdict_display = "❌ FALSE"
-        elif verdict == "Satire / Fiction":
-            verdict_display = "🎭 SATIRE / FICTION"
-
-        summary_data = [
-            [Paragraph("<b>Verdict:</b>", body_style), Paragraph(verdict_display, body_style)],
-            [Paragraph("<b>Verification Score:</b>", body_style), Paragraph(f"{verdict_score}/100", body_style)],
-            [Paragraph("<b>AI Generated Probability:</b>", body_style), Paragraph(f"{data.get('ai_generated_probability', 0)}%", body_style)],
-            [Paragraph("<b>Spread Risk:</b>", body_style), Paragraph(data.get('spread_risk', 'Low'), body_style)],
-        ]
-        summary_table = Table(summary_data, colWidths=[150, 350])
-        summary_table.setStyle(TableStyle([
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
-            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
-        ]))
-        story.append(summary_table)
-        story.append(Spacer(1, 10))
-
-        # Explanation
-        explanation = data.get("explanation", "")
-        if explanation:
-            story.append(Paragraph(f"<i>{explanation}</i>", body_style))
-            story.append(Spacer(1, 10))
-
-        # Verification Signals
-        story.append(Paragraph("Verification Signals", h2_style))
-        signals = data.get("signals", {})
-        signal_data = [
-            ["Signal", "Score", "Weight"],
-            [Paragraph("Source Credibility", body_style), Paragraph(f"{signals.get('source_credibility', 0)}%", body_style), Paragraph("25%", body_style)],
-            [Paragraph("Evidence Strength", body_style), Paragraph(f"{signals.get('evidence_strength', 0)}%", body_style), Paragraph("25%", body_style)],
-            [Paragraph("Cross-Source Agreement", body_style), Paragraph(f"{signals.get('cross_source_agreement', 0)}%", body_style), Paragraph("20%", body_style)],
-            [Paragraph("Author Expertise", body_style), Paragraph(f"{signals.get('author_expertise', 0)}%", body_style), Paragraph("15%", body_style)],
-            [Paragraph("Contradiction Score", body_style), Paragraph(f"{signals.get('contradiction_score', 0)}%", body_style), Paragraph("10%", body_style)],
-            [Paragraph("Satire Markers", body_style), Paragraph(f"{signals.get('satire_markers', 0)}%", body_style), Paragraph("5%", body_style)],
-        ]
-        signal_table = Table(signal_data, colWidths=[200, 150, 150])
-        signal_table.setStyle(TableStyle([
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-        ]))
-        story.append(signal_table)
-        story.append(Spacer(1, 15))
-
-        # Claims
-        story.append(Paragraph("Claim-Level Verification", h2_style))
-        claims = data.get("claims", [])
-        if claims:
-            claim_rows = [["Claim", "Verdict", "Explanation"]]
-            for c in claims:
-                claim_rows.append([
-                    Paragraph(c.get("claim", ""), body_style),
-                    Paragraph(c.get("verdict", ""), body_style),
-                    Paragraph(c.get("explanation", ""), body_style)
-                ])
-            claim_table = Table(claim_rows, colWidths=[150, 70, 280])
-            claim_table.setStyle(TableStyle([
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-            ]))
-            story.append(claim_table)
-        else:
-            story.append(Paragraph("No individual claims analyzed.", body_style))
-        story.append(Spacer(1, 15))
-
-        # Knowledge Graph
-        story.append(Paragraph("Knowledge Graph Validation", h2_style))
-        kg = data.get("knowledge_graph", [])
-        if kg:
-            kg_rows = [["Relation", "Status", "Reason"]]
-            for k in kg:
-                rel = f"{k.get('subject', '')} -> {k.get('predicate', '')} -> {k.get('object', '')}"
-                kg_rows.append([
-                    Paragraph(rel, body_style),
-                    Paragraph(k.get("verdict", ""), body_style),
-                    Paragraph(k.get("reason", ""), body_style)
-                ])
-            kg_table = Table(kg_rows, colWidths=[180, 70, 250])
-            kg_table.setStyle(TableStyle([
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-            ]))
-            story.append(kg_table)
-        else:
-            story.append(Paragraph("No relationships extracted.", body_style))
-
-        doc.build(story)
-        pdf_buffer.seek(0)
-
-        return StreamingResponse(
-            pdf_buffer,
-            media_type="application/pdf",
-            headers={"Content-Disposition": "attachment; filename=TruthLens_Report.pdf"}
-        )
-    except Exception as e:
-        print(f"Error generating PDF: {e}")
-        from fastapi import HTTPException
-        raise HTTPException(status_code=500, detail=f"PDF Export Error: {str(e)}")
+    from fastapi import HTTPException
+    raise HTTPException(status_code=501, detail="PDF Export is disabled to fit Vercel size limits.")
 
 
 # ============================================================
