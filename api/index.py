@@ -1119,14 +1119,16 @@ async def export_pdf(data: dict = Body(...)):
 
 
 # ============================================================
-# STATIC FILES & STARTUP
+# LOCAL DEV SERVER
 # ============================================================
-
-from fastapi.staticfiles import StaticFiles
-
-frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend"))
-app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8019, reload=True)
+    from fastapi.staticfiles import StaticFiles
+    import os
+    
+    public_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../public"))
+    if os.path.exists(public_dir):
+        app.mount("/", StaticFiles(directory=public_dir, html=True), name="public")
+        
+    uvicorn.run("index:app", host="0.0.0.0", port=8019, reload=True)
