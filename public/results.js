@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "estimated_reach": "Low <1K",
                 "counterfactual_advice": "This content appears factually sound. No immediate action needed.",
                 "important_words": [],
-                "engine_message": "Analysis powered by Gemini 2.5 Flash + 6-Stage Verification Pipeline.",
+                "engine_message": "Analysis powered by Axiogen + 6-Stage Verification Pipeline",
                 "analyzed_text": "PM Modi and French President Emmanuel Macron launched the 'Bharat Innovates 2026' initiative in Nice."
             };
             sessionStorage.setItem('analysisResult', JSON.stringify(mockData));
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const engineNameEl = document.getElementById('engine-name');
         if (engineNameEl) {
-            engineNameEl.textContent = 'Gemini 2.5 Flash';
+            engineNameEl.textContent = 'Axiogen';
         }
 
         const spreadRisk = document.getElementById('spread-risk');
