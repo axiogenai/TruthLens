@@ -1,8 +1,9 @@
 fastapi
 uvicorn
 pydantic
-google-generativeai
+google-genai
 python-multipart
 pypdf
 Pillow
 httpx
+reportlab
